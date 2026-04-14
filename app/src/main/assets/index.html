@@ -1000,5 +1000,14 @@ if (isAndroid) {
   }, 500);
 }
 </script>
+  
+<script>
+fetch("https://four-org-bgmibooster.onrender.com/api")
+.then(res => res.json())
+.then(data => {
+  console.log(data);
+});
+</script>
+  
 </body>
 </html>
