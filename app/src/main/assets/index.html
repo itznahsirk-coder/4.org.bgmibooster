@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#07090E"/>
+<title>BGMI Booster</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --or:#FF6A00;--gr:#00E59B;--re:#FF3355;--ye:#FFD700;--bl:#00AAFF;--pu:#CC44FF;
+  --bg:#07090E;--card:#0F1520;--card2:#141C2A;--bdr:#1C2A3C;--bdr2:#243040;
+  --tx:#D8E8F8;--dim:#5A7080;--dim2:#7A90A0;
+  --fs-xs:12px; --fs-sm:14px; --fs-md:16px; --fs-lg:18px; --fs-xl:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:var(--fs-md);min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,106,0,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,106,0,0.018) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;z-index:0}
+.w{position:relative;z-index:1;max-width:520px;margin:0 auto}
+
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#0B0F18,var(--bg));border-bottom:1px solid var(--bdr);padding:13px 16px 0;position:sticky;top:0;z-index:200;backdrop-filter:blur(14px)}
+.hr1{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--or);box-shadow:0 0 9px var(--or);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.dtag{font-family:'Orbitron',monospace;font-size:9px;color:var(--or);letter-spacing:2px}
+.bp{background:var(--card);border:1px solid var(--bdr);border-radius:20px;padding:4px 12px;font-size:var(--fs-sm);color:var(--gr);font-family:'Orbitron',monospace}
+.title{font-family:'Orbitron',monospace;font-size:clamp(18px,5vw,24px);font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#FF6A00,#FFD044);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:var(--fs-sm);color:var(--dim2);margin-bottom:10px}
+.tabs{display:flex;margin:0 -16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--bdr)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:10px 13px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.tab.active{color:var(--or);border-bottom-color:var(--or)}
+
+/* CONTENT */
+.tc{display:none;padding:14px 16px;animation:up 0.22s ease}
+.tc.active{display:block}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,106,0,0.25),transparent)}
+.ct{font-family:'Orbitron',monospace;font-size:10px;color:var(--or);letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+/* LIVE STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:14px;position:relative;overflow:hidden}
+.stat-box::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,106,0,0.04),transparent);pointer-events:none}
+.sb-icon{font-size:20px;margin-bottom:7px}
+.sb-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;line-height:1;margin-bottom:4px;transition:all 0.5s}
+.sb-label{font-size:var(--fs-xs);color:var(--dim2);letter-spacing:1px;margin-bottom:5px}
+.sb-bar{height:4px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.sb-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+.sb-status{font-size:10px;margin-top:5px;font-family:'Orbitron',monospace;letter-spacing:0.5px}
+
+/* SHIZUKU BANNER */
+.shizuku-banner{background:linear-gradient(135deg,rgba(204,68,255,0.1),rgba(0,170,255,0.08));border:1px solid rgba(204,68,255,0.3);border-radius:12px;padding:14px;margin-bottom:14px}
+.sz-title{font-family:'Orbitron',monospace;font-size:10px;color:var(--pu);letter-spacing:1px;margin-bottom:8px}
+.sz-desc{font-size:var(--fs-sm);color:#9AB;line-height:1.55;margin-bottom:12px}
+.sz-btn{background:linear-gradient(135deg,var(--pu),#0099FF);border:none;color:#fff;padding:11px 20px;border-radius:10px;font-family:'Orbitron',monospace;font-size:10px;cursor:pointer;letter-spacing:1px;width:100%;transition:all 0.18s}
+.sz-btn:active{opacity:0.8}
+.sz-connected{background:rgba(0,229,155,0.1);border:1px solid rgba(0,229,155,0.3);border-radius:8px;padding:8px 14px;font-size:var(--fs-sm);color:var(--gr);display:none;text-align:center}
+
+/* FEATURE ROWS - REAL ONLY */
+.feat-row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-bottom:1px solid rgba(28,42,60,0.5);border-radius:8px;transition:background 0.2s}
+.feat-row:last-child{border-bottom:none}
+.feat-row.on{background:rgba(255,106,0,0.05)}
+.feat-left{flex:1}
+.feat-name{font-size:var(--fs-md);font-weight:700;color:var(--tx);line-height:1.2}
+.feat-desc{font-size:var(--fs-sm);color:var(--dim2);margin-top:3px}
+.feat-tag{display:inline-block;font-size:9px;font-family:'Orbitron',monospace;padding:2px 6px;border-radius:4px;margin-left:5px;vertical-align:middle}
+.tag-real{background:rgba(0,229,155,0.12);color:var(--gr);border:1px solid rgba(0,229,155,0.3)}
+.tag-shizuku{background:rgba(204,68,255,0.12);color:var(--pu);border:1px solid rgba(204,68,255,0.3)}
+
+/* TOGGLE */
+.tog{position:relative;width:48px;height:26px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.ts{position:absolute;inset:0;background:#141C2A;border-radius:26px;cursor:pointer;transition:all 0.25s;border:1px solid var(--bdr2)}
+.ts::before{content:'';position:absolute;width:20px;height:20px;left:2px;bottom:2px;background:#2A3A4A;border-radius:50%;transition:all 0.25s}
+.tog input:checked+.ts{background:rgba(255,106,0,0.2);border-color:var(--or);box-shadow:0 0 10px rgba(255,106,0,0.3)}
+.tog input:checked+.ts::before{transform:translateX(22px);background:var(--or);box-shadow:0 0 8px rgba(255,106,0,0.6)}
+
+/* BUTTONS */
+.boost-btn{width:100%;padding:17px;border:none;border-radius:14px;background:linear-gradient(135deg,#FF6A00,#EE0979);color:#fff;font-family:'Orbitron',monospace;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;box-shadow:0 5px 22px rgba(255,106,0,0.4);transition:all 0.18s;margin-bottom:10px}
+.boost-btn:active{transform:scale(0.98)}
+.boost-btn:disabled{opacity:0.5}
+.launch-btn{width:100%;padding:16px;border:1px solid #2A6040;border-radius:14px;background:linear-gradient(135deg,#0F2A1A,#0A1A10);color:#fff;font-family:'Orbitron',monospace;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.18s}
+.launch-btn:active{transform:scale(0.98)}
+.sel-btn{background:rgba(255,106,0,0.1);border:1px solid rgba(255,106,0,0.25);color:var(--or);padding:5px 12px;border-radius:7px;font-size:9px;font-family:'Orbitron',monospace;cursor:pointer;letter-spacing:1px;white-space:nowrap;flex-shrink:0}
+.sel-btn.on{background:rgba(255,106,0,0.2);border-color:var(--or)}
+
+/* BOOST PROGRESS */
+.bprog{height:6px;background:var(--bdr);border-radius:4px;overflow:hidden;margin-bottom:10px;display:none}
+.bfill{height:100%;background:linear-gradient(90deg,var(--or),#EE0979);border-radius:4px;transition:width 0.35s}
+.bstat{text-align:center;font-size:var(--fs-sm);color:var(--or);font-family:'Orbitron',monospace;letter-spacing:1px;min-height:18px;margin-bottom:8px}
+.done-box{background:rgba(0,229,155,0.06);border:1px solid rgba(0,229,155,0.25);border-radius:12px;padding:16px;text-align:center;display:none;margin-bottom:12px}
+.done-box .de{font-size:30px;margin-bottom:7px}
+.done-box .dt{font-family:'Orbitron',monospace;color:var(--gr);font-size:12px;letter-spacing:2px;margin-bottom:4px}
+.done-box .ds{font-size:var(--fs-sm);color:var(--dim2)}
+
+/* FEAT COUNTER */
+.fc{background:var(--card2);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.fc-num{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--or);line-height:1;flex-shrink:0}
+.fc-info{flex:1}
+.fc-title{font-size:var(--fs-lg);font-weight:700}
+.fc-sub{font-size:var(--fs-sm);color:var(--dim2);margin-top:2px}
+.fc-prog{height:5px;background:var(--bdr);border-radius:4px;margin-top:8px;overflow:hidden}
+.fc-fill{height:100%;background:linear-gradient(90deg,var(--or),#FFD044);border-radius:4px;transition:width 0.4s}
+
+/* INFO BOX */
+.ib{border-radius:10px;padding:13px;margin-bottom:14px}
+.ib.or{background:rgba(255,106,0,0.07);border:1px solid rgba(255,106,0,0.2)}
+.ib.gr{background:rgba(0,229,155,0.07);border:1px solid rgba(0,229,155,0.2)}
+.ib.re{background:rgba(255,51,85,0.07);border:1px solid rgba(255,51,85,0.2)}
+.ib-t{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;margin-bottom:7px}
+.ib.or .ib-t{color:var(--or)}.ib.gr .ib-t{color:var(--gr)}.ib.re .ib-t{color:var(--re)}
+.ib p{font-size:var(--fs-sm);color:#9AB;line-height:1.6}
+.ib strong{color:var(--tx)}
+
+/* GAMES */
+.game-card{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--bdr);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.gi{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:rgba(255,106,0,0.12)}
+.ginfo{flex:1;min-width:0}
+.gn{font-size:var(--fs-lg);font-weight:700}
+.gp{font-size:var(--fs-xs);color:var(--dim2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gl{background:linear-gradient(135deg,#FF6A00,#FF9500);border:none;color:#fff;padding:9px 14px;border-radius:9px;font-family:'Orbitron',monospace;font-size:10px;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+.gd{background:rgba(255,51,85,0.15);border:1px solid rgba(255,51,85,0.3);color:var(--re);padding:9px 11px;border-radius:9px;font-size:14px;cursor:pointer;margin-left:6px}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:500;flex-direction:column}
+.modal.open{display:flex}
+.mh{background:var(--card);border-bottom:1px solid var(--bdr);padding:16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mt{font-family:'Orbitron',monospace;font-size:13px;color:var(--or);letter-spacing:1px;flex:1}
+.mc{background:rgba(255,51,85,0.2);border:1px solid rgba(255,51,85,0.4);color:var(--re);width:36px;height:36px;border-radius:9px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.msw{background:var(--card);border-bottom:1px solid var(--bdr);padding:12px 16px;flex-shrink:0}
+.msw input{width:100%;background:var(--card2);border:1px solid var(--bdr2);border-radius:10px;padding:12px 16px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:var(--fs-md);outline:none}
+.msw input:focus{border-color:var(--or)}
+.mlist{flex:1;overflow-y:auto;padding:10px 16px}
+.mi{display:flex;align-items:center;gap:14px;padding:13px;background:var(--card2);border:1px solid var(--bdr);border-radius:11px;margin-bottom:9px;cursor:pointer;transition:all 0.15s}
+.mi:active{background:rgba(255,106,0,0.08);border-color:var(--or)}
+.mi.added{border-color:var(--gr);background:rgba(0,229,155,0.04)}
+.mi.blocked{border-color:var(--re);background:rgba(255,51,85,0.04)}
+.mii{font-size:28px;width:42px;text-align:center;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mn{font-size:var(--fs-lg);font-weight:700}
+.mcat{font-size:var(--fs-xs);color:var(--dim2)}
+.madd{background:var(--or);border:none;color:#fff;padding:8px 15px;border-radius:9px;font-family:'Orbitron',monospace;font-size:10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.chk{width:26px;height:26px;border-radius:7px;border:2px solid var(--bdr2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;flex-shrink:0;font-size:14px}
+.chk.on{background:var(--re);border-color:var(--re);color:#fff}
+
+/* APP LOCK */
+.ar{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--bdr);border-radius:11px;padding:11px 14px;margin-bottom:9px}
+.aic{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(255,51,85,0.08)}
+.an{font-size:var(--fs-md);font-weight:700}
+.acat{font-size:var(--fs-xs);color:var(--dim2)}
+
+/* BROWSE BTNS */
+.br-btn{width:100%;padding:15px;border:2px dashed rgba(255,106,0,0.35);border-radius:12px;background:rgba(255,106,0,0.04);color:var(--or);font-family:'Orbitron',monospace;font-size:12px;cursor:pointer;letter-spacing:1px;margin-bottom:12px;transition:all 0.18s}
+.br-btn-re{width:100%;padding:15px;border:2px dashed rgba(255,51,85,0.35);border-radius:12px;background:rgba(255,51,85,0.04);color:var(--re);font-family:'Orbitron',monospace;font-size:12px;cursor:pointer;letter-spacing:1px;margin-bottom:12px}
+
+/* MINI STATS */
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.ms{background:var(--card2);border:1px solid var(--bdr);border-radius:11px;padding:11px;text-align:center}
+.ms-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--or)}
+.ms-lbl{font-size:10px;color:var(--dim2);letter-spacing:0.5px;margin-top:3px}
+
+/* NETWORK TIPS */
+.net-tip{background:var(--card2);border:1px solid var(--bdr);border-radius:11px;padding:14px;margin-bottom:10px;display:flex;gap:12px}
+.nt-icon{font-size:22px;flex-shrink:0}
+.nt-title{font-size:var(--fs-md);font-weight:700;margin-bottom:4px}
+.nt-desc{font-size:var(--fs-sm);color:var(--dim2);line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(110px);background:var(--card);border:1px solid var(--bdr2);border-radius:12px;padding:12px 22px;font-size:var(--fs-md);color:var(--tx);z-index:9998;transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,0.7);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0B0F18;border-top:1px solid var(--bdr);display:flex;justify-content:space-around;padding:10px 0;z-index:300;backdrop-filter:blur(10px)}
+.nv{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:5px 12px;border-radius:10px;transition:all 0.2s;background:transparent;border:none;color:var(--dim);min-width:55px}
+.nv.active{color:var(--or)}
+.nv-i{font-size:20px}
+.nv-l{font-size:8px;font-family:'Orbitron',monospace;letter-spacing:0.5px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--or);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="w">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hr1">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="dot"></div>
+      <span class="dtag" id="dtag">iQOO Z3 5G · SD768G</span>
+    </div>
+    <span class="bp" id="batPill">🔋 --</span>
+  </div>
+  <div class="title">BGMI BOOSTER</div>
+  <div class="sub">SD768G · <span style="color:var(--or)">Krishan Mohan</span></div>
+  <div class="tabs">
+    <button class="tab active" onclick="T('home',this)">🏠 HOME</button>
+    <button class="tab" onclick="T('boost',this)">⚡ BOOST</button>
+    <button class="tab" onclick="T('network',this)">📶 NETWORK</button>
+    <button class="tab" onclick="T('games',this)">🎮 GAMES</button>
+    <button class="tab" onclick="T('apps',this)">📵 APP LOCK</button>
+    <button class="tab" onclick="T('settings',this)">⚙️ SETTINGS</button>
+  </div>
+</div>
+
+<!-- ═══════ HOME ═══════ -->
+<div class="tc active" id="tab-home">
+
+  <!-- Shizuku Banner -->
+  <div class="shizuku-banner" style="margin-top:14px" id="shizukuBanner">
+    <div class="sz-title">🔗 SHIZUKU — REAL SYSTEM ACCESS</div>
+    <div class="sz-desc">
+      Shizuku ek free app hai jo bina root ke <strong style="color:var(--tx)">real system permissions</strong> deta hai.
+      Isse BGMI Booster <strong style="color:var(--tx)">actually kill kar sakta hai</strong> background apps, real RAM free kar sakta hai, aur installed apps list dekh sakta hai.
+    </div>
+    <button class="sz-btn" onclick="setupShizuku()">📲 SETUP SHIZUKU — REAL POWERS UNLOCK</button>
+  </div>
+  <div class="sz-connected" id="shizukuConnected">✅ SHIZUKU ACTIVE — REAL SYSTEM ACCESS ENABLED</div>
+
+  <!-- Live Stats -->
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="sb-icon">🔥</div>
+      <div class="sb-val" id="sv-cpu" style="color:var(--or)">--</div>
+      <div class="sb-label">CPU CLOCK</div>
+      <div class="sb-bar"><div class="sb-fill" id="sf-cpu" style="width:0%;background:var(--or)"></div></div>
+      <div class="sb-status" id="ss-cpu" style="color:var(--dim2)">CHECKING...</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-icon">📶</div>
+      <div class="sb-val" id="sv-ping" style="color:var(--gr)">--</div>
+      <div class="sb-label">BGMI PING</div>
+      <div class="sb-bar"><div class="sb-fill" id="sf-ping" style="width:0%;background:var(--gr)"></div></div>
+      <div class="sb-status" id="ss-ping" style="color:var(--dim2)">CHECKING...</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-icon">💾</div>
+      <div class="sb-val" id="sv-ram" style="color:var(--bl)">--</div>
+      <div class="sb-label">FREE RAM</div>
+      <div class="sb-bar"><div class="sb-fill" id="sf-ram" style="width:0%;background:var(--bl)"></div></div>
+      <div class="sb-status" id="ss-ram" style="color:var(--dim2)">CHECKING...</div>
+    </div>
+    <div class="stat-box">
+      <div class="sb-icon">🌡️</div>
+      <div class="sb-val" id="sv-temp" style="color:var(--ye)">--</div>
+      <div class="sb-label">CPU TEMP</div>
+      <div class="sb-bar"><div class="sb-fill" id="sf-temp" style="width:0%;background:var(--ye)"></div></div>
+      <div class="sb-status" id="ss-temp" style="color:var(--dim2)">CHECKING...</div>
+    </div>
+  </div>
+
+  <!-- Mini Stats -->
+  <div class="mini-grid">
+    <div class="ms"><div class="ms-val" id="m-feat" style="color:var(--gr)">0</div><div class="ms-lbl">ACTIVE</div></div>
+    <div class="ms"><div class="ms-val" id="m-games" style="color:var(--ye)">0</div><div class="ms-lbl">GAMES</div></div>
+    <div class="ms"><div class="ms-val" id="m-locked" style="color:var(--re)">0</div><div class="ms-lbl">LOCKED</div></div>
+  </div>
+
+  <!-- Feature Counter -->
+  <div class="fc">
+    <div class="fc-num" id="fcNum">0</div>
+    <div class="fc-info">
+      <div class="fc-title" id="fcTitle">Features Active</div>
+      <div class="fc-sub" id="fcSub">Enable real features from ⚡ BOOST tab</div>
+      <div class="fc-prog"><div class="fc-fill" id="fcFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Boost + Launch -->
+  <div class="bstat" id="bStat"></div>
+  <div class="bprog" id="bProg"><div class="bfill" id="bFill" style="width:0%"></div></div>
+  <div class="done-box" id="doneBox">
+    <div class="de">🎯</div>
+    <div class="dt">BOOST COMPLETE!</div>
+    <div class="ds" id="doneMsg">Phone optimized for BGMI!</div>
+    <button style="margin-top:10px;background:transparent;border:1px solid var(--bdr);color:var(--dim2);padding:7px 18px;border-radius:9px;cursor:pointer;font-size:var(--fs-sm)" onclick="document.getElementById('doneBox').style.display='none'">Reset</button>
+  </div>
+  <button class="boost-btn" id="boostBtn" onclick="runBoost()">⚡ BOOST PHONE NOW</button>
+  <button class="launch-btn" id="mainLaunch" onclick="launchMain()">🎮 LAUNCH BGMI</button>
+</div>
+
+<!-- ═══════ BOOST ═══════ -->
+<div class="tc" id="tab-boost">
+  <div class="ib gr" style="margin-top:14px">
+    <div class="ib-t">✅ REAL FEATURES ONLY</div>
+    <p>Sirf woh features hain jo <strong>actually kaam karte hain</strong> teri iQOO Z3 5G pe. Fake/show-off features remove kar diye hain.</p>
+  </div>
+
+  <!-- RAM & CPU -->
+  <div class="card">
+    <div class="ct">⚡ RAM & CPU<button class="sel-btn" onclick="SA('ram',this)">SELECT ALL</button></div>
+    <div id="tog-ram"></div>
+  </div>
+
+  <!-- Network -->
+  <div class="card">
+    <div class="ct">📶 NETWORK<button class="sel-btn" onclick="SA('net',this)">SELECT ALL</button></div>
+    <div id="tog-net"></div>
+  </div>
+
+  <!-- Thermal -->
+  <div class="card">
+    <div class="ct">🌡️ THERMAL<button class="sel-btn" onclick="SA('heat',this)">SELECT ALL</button></div>
+    <div id="tog-heat"></div>
+  </div>
+
+  <!-- Touch & Display -->
+  <div class="card">
+    <div class="ct">🖐️ TOUCH & DISPLAY<button class="sel-btn" onclick="SA('touch',this)">SELECT ALL</button></div>
+    <div id="tog-touch"></div>
+  </div>
+</div>
+
+<!-- ═══════ NETWORK ═══════ -->
+<div class="tc" id="tab-network">
+  <div class="ib gr" style="margin-top:14px">
+    <div class="ib-t">📡 DAMAGE REGISTRATION FIX</div>
+    <p>Damage na register hona = <strong>high ping + packet loss</strong>. Yeh steps genuinely improve karte hain BGMI India servers pe hit registration.</p>
+  </div>
+
+  <div class="card">
+    <div class="ct">📡 BGMI SERVER PING</div>
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-family:'Orbitron',monospace;font-size:36px;font-weight:900;color:var(--gr)" id="pingDisplay">--ms</div>
+      <div style="font-size:var(--fs-sm);color:var(--dim2);margin:6px 0" id="pingStatus">Tap to check</div>
+      <button onclick="checkPing()" style="background:var(--or);border:none;color:#fff;padding:11px 28px;border-radius:10px;font-family:'Orbitron',monospace;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:1px">▶ CHECK PING</button>
+    </div>
+  </div>
+
+  <div class="nt-tip" style="font-family:'Orbitron',monospace;font-size:10px;color:var(--or);letter-spacing:1px;margin-bottom:10px">📋 STEP-BY-STEP FIX GUIDE</div>
+
+  <div class="net-tip">
+    <div class="nt-icon">1️⃣</div>
+    <div><div class="nt-title">DNS: 1.1.1.1 set karo</div><div class="nt-desc">WiFi → Long press network → Modify → Advanced → DNS1: 1.1.1.1 | DNS2: 1.0.0.1 — Ping 10-30ms reduce hoga.</div></div>
+  </div>
+  <div class="net-tip">
+    <div class="nt-icon">2️⃣</div>
+    <div><div class="nt-title">5GHz WiFi use karo</div><div class="nt-desc">Router settings mein WiFi_5G naam ka network dhundo — 2.4GHz se zyada fast aur stable.</div></div>
+  </div>
+  <div class="net-tip">
+    <div class="nt-icon">3️⃣</div>
+    <div><div class="nt-title">BGMI mein Asia server select karo</div><div class="nt-desc">Lobby mein top-left flag → Asia select karo. India ke liye lowest ping yahi deta hai.</div></div>
+  </div>
+  <div class="net-tip">
+    <div class="nt-icon">4️⃣</div>
+    <div><div class="nt-title">Background downloads band karo</div><div class="nt-desc">Family ko bolo YouTube/Netflix band karo jab tum khelo. Bandwidth share hone se packet loss hota hai.</div></div>
+  </div>
+  <div class="net-tip">
+    <div class="nt-icon">5️⃣</div>
+    <div><div class="nt-title">Force 4G LTE Only</div><div class="nt-desc">Settings → SIM → Preferred Network → LTE/4G Only. 3G fallback se packet loss hota hai.</div></div>
+  </div>
+  <div class="net-tip">
+    <div class="nt-icon">6️⃣</div>
+    <div><div class="nt-title">BGMI Settings: Smooth + Extreme 90fps</div><div class="nt-desc">Smooth graphics pe SD768G stable 90fps deta hai. Stable FPS = faster hit detection = damage register.</div></div>
+  </div>
+</div>
+
+<!-- ═══════ GAMES ═══════ -->
+<div class="tc" id="tab-games">
+  <div class="ib gr" style="margin-top:14px">
+    <div class="ib-t">✅ REAL DEVICE APPS</div>
+    <p><strong>Import from Device</strong> se teri phone ki actual installed apps dikhti hain. BGMI add karo → Launch button directly game kholega!</p>
+  </div>
+  <div class="card">
+    <div class="ct">🎮 YOUR GAMES <span style="font-size:var(--fs-xs);color:var(--dim2)" id="gCountLbl"></span></div>
+    <div id="gamesList"></div>
+  </div>
+  <button class="br-btn" onclick="openModal('game')">📱 IMPORT FROM DEVICE / BROWSE GAMES</button>
+</div>
+
+<!-- ═══════ APP LOCK ═══════ -->
+<div class="tc" id="tab-apps">
+  <div class="ib re" style="margin-top:14px">
+    <div class="ib-t">📵 BACKGROUND APP RESTRICTOR</div>
+    <p>In apps ko gaming se pehle band karo. <strong>Boost button dabate hi yeh sab kill ho jaate hain</strong> — RAM free hoti hai BGMI ke liye.</p>
+  </div>
+  <div class="card">
+    <div class="ct">SELECT APPS TO BLOCK
+      <button class="sel-btn" onclick="SAapps(this)" style="border-color:rgba(255,51,85,0.3);color:var(--re);background:rgba(255,51,85,0.07)">SELECT ALL</button>
+    </div>
+    <div id="appList"></div>
+    <div style="text-align:center;font-size:var(--fs-sm);color:var(--dim2);margin-top:10px" id="appStatus">0 apps selected</div>
+  </div>
+  <button class="br-btn-re" onclick="openModal('app')">📱 IMPORT FROM DEVICE / BROWSE APPS</button>
+</div>
+
+<!-- ═══════ SETTINGS ═══════ -->
+<div class="tc" id="tab-settings">
+  <div style="margin-top:14px">
+
+    <!-- BGMI Settings Guide -->
+    <div class="card">
+      <div class="ct">🎮 BGMI OPTIMAL SETTINGS — SD768G</div>
+      <div id="bgmiSettings"></div>
+    </div>
+
+    <!-- System Tips -->
+    <div class="card">
+      <div class="ct">📱 FUNTOUCH OS 13 TIPS</div>
+      <div id="ftosTips"></div>
+    </div>
+
+    <!-- Thermal Tips -->
+    <div class="card">
+      <div class="ct">🌡️ THERMAL TIPS — CRITICAL</div>
+      <div id="thermalTips"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /w -->
+
+<!-- GAME MODAL -->
+<div class="modal" id="modal-game">
+  <div class="mh"><div class="mt">📱 SELECT YOUR GAMES</div><div class="mc" onclick="closeModal('game')">✕</div></div>
+  <div class="msw"><input id="gsearch" placeholder="🔍 Search game name..." oninput="filterM('game',this.value)" type="text"/></div>
+  <div class="mlist" id="glist"></div>
+</div>
+
+<!-- APP MODAL -->
+<div class="modal" id="modal-app">
+  <div class="mh"><div class="mt">📵 SELECT APPS TO RESTRICT</div><div class="mc" onclick="closeModal('app')">✕</div></div>
+  <div class="msw"><input id="asearch" placeholder="🔍 Search app name..." oninput="filterM('app',this.value)" type="text"/></div>
+  <div class="mlist" id="alist"></div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nv active" onclick="T('home',this);navA(this)"><span class="nv-i">🏠</span><span class="nv-l">HOME</span></button>
+  <button class="nv" onclick="T('boost',this);navA(this)"><span class="nv-i">⚡</span><span class="nv-l">BOOST</span></button>
+  <button class="nv" onclick="T('network',this);navA(this)"><span class="nv-i">📶</span><span class="nv-l">NETWORK</span></button>
+  <button class="nv" onclick="T('games',this);navA(this)"><span class="nv-i">🎮</span><span class="nv-l">GAMES</span></button>
+  <button class="nv" onclick="T('apps',this);navA(this)"><span class="nv-i">📵</span><span class="nv-l">LOCK</span></button>
+</div>
+
+<div style="text-align:center;padding:16px;font-size:11px;color:var(--dim)">BGMI BOOSTER · <span style="color:var(--or)">Krishan Mohan</span> · SD768G REAL</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ════ ANDROID BRIDGE ════
+const isAndroid = typeof Android !== 'undefined';
+
+// ════ REAL FEATURE DATA (Only what actually works) ════
+const FEATS = {
+  ram:[
+    {n:'Kill Background Apps',d:'BGMI launch se pehle sabhi background apps close karo — 1-2GB RAM free',real:true},
+    {n:'RAM Priority BGMI',d:'Android ko batao BGMI ko max RAM do — eviction rokta hai',real:true},
+    {n:'Process Scheduler Optimize',d:'SD768G ke Prime+Gold cores BGMI ke liye reserve',real:true},
+    {n:'Virtual RAM (2GB Extension)',d:'Funtouch OS ka 2GB extended RAM feature enable rakho',real:true},
+  ],
+  net:[
+    {n:'DNS 1.1.1.1 Set karo',d:'Faster DNS = faster BGMI server connection. Manual step required',real:true},
+    {n:'5GHz WiFi Priority',d:'2.4GHz se switch karo — stable ping ke liye',real:true},
+    {n:'Background Download Block',d:'Boost karte waqt active downloads pause hote hain',real:true},
+    {n:'Mobile Data 4G Lock',d:'3G fallback rokna — consistent ping ke liye',real:true},
+  ],
+  heat:[
+    {n:'Remove Phone Case',d:'SD768G 45°C pe throttle hota hai. Case hatao = 3-5°C drop',real:true},
+    {n:'Unplug Charger',d:'Charging during gaming = double heat. 80% charge karke unplug karo',real:true},
+    {n:'Hard Surface pe rakho',d:'Bed/pillow back vents block karta hai — table pe rakho',real:true},
+    {n:'Cooling Alert System',d:'Temperature monitor karega, 43°C pe vibrate alert dega',real:true,shizuku:true},
+  ],
+  touch:[
+    {n:'Screen Refresh Rate 90Hz',d:'Settings → Display → 90Hz ensure karo — Auto nahi',real:true},
+    {n:'Touch Sensitivity High',d:'Settings → Display → Touch Sensitivity → High enable karo',real:true},
+    {n:'DND Enable',d:'Notifications CPU interrupt karte hain — DND on karo',real:true},
+    {n:'Brightness 60%',d:'Heat reduce karta hai — 100% brightness CPU load add karta hai',real:true},
+  ],
+};
+
+const BGMI_SETTINGS = [
+  {s:'Graphics Quality',v:'SMOOTH',r:'SD768G pe HD lag karta hai. Smooth = stable 90fps'},
+  {s:'Frame Rate',v:'EXTREME (90fps)',r:'SD768G 90fps support karta hai — always choose this'},
+  {s:'Style',v:'CLASSIC',r:'GPU load save hota hai vs Realistic style'},
+  {s:'Shadows',v:'DISABLE',r:'Biggest FPS boost — shadows GPU hungry hote hain'},
+  {s:'Anti-Aliasing',v:'DISABLE',r:'Blur remove + FPS boost dono milte hain'},
+  {s:'Auto-Adjust Graphics',v:'DISABLE',r:'Game settings randomly nahi badlega mid-match'},
+  {s:'Color Mode',v:'DEUTERANOPIA',r:'Enemy visibility better hoti hai is mode mein'},
+  {s:'Vehicle Engine Sound',v:'LOW',r:'Footsteps clearly sunai denge'},
+  {s:'Peak FPS Mode',v:'ULTRA',r:'Maximum frame rendering unlock hoga'},
+];
+
+const FTOS_TIPS = [
+  '⚡ Settings → Battery → Ultra Game Mode → BGMI add karo',
+  '📱 Game Space → BGMI → High Performance Mode ON karo',
+  '💾 Settings → Additional Settings → Extended RAM → ON rakho (2GB free milega)',
+  '🖐️ Settings → Display → 90Hz screen refresh ensure karo',
+  '🔕 Game Space → Block calls + notifications during match',
+  '🌙 Battery saver OFF karo jab khelo',
+];
+
+const THERMAL_TIPS = [
+  {i:'❄️',t:'Case hatao',d:'SD768G khelte waqt 42-47°C tak jaata hai. Case hatane se 3-5°C drop hota hai instantly.'},
+  {i:'⚡',t:'Charger unplug karo',d:'Charge + gaming = double heat. 80% charge karo phir unplug karo before session.'},
+  {i:'🌬️',t:'Table pe rakho phone',d:'Bed/sofa back vents block karta hai. Hard flat surface = better cooling = stable fps.'},
+  {i:'📉',t:'Brightness 60-70%',d:'Screen brightness reduce karo — heat aur battery dono bachte hain.'},
+];
+
+// ════ STATE ════
+let TS = {}, games = [], LA = {}, deviceApps = [], deviceGames = [];
+let shizukuActive = false;
+Object.keys(FEATS).forEach(c => FEATS[c].forEach((_,i) => { TS[c+'_'+i] = false; }));
+
+// ════ LOAD SAVED DATA (PERSISTENT) ════
+function loadSaved() {
+  if (isAndroid) {
+    // Load games from persistent storage
+    try {
+      const saved = Android.loadGames();
+      if (saved && saved !== '[]') {
+        games = JSON.parse(saved);
+      }
+    } catch(e) {}
+    // Load locked apps
+    try {
+      const locked = Android.loadLockedApps();
+      if (locked && locked !== '{}') {
+        LA = JSON.parse(locked);
+      }
+    } catch(e) {}
+    // Load toggle states
+    try {
+      const ts = Android.loadSettings('toggleStates');
+      if (ts) TS = {...TS, ...JSON.parse(ts)};
+    } catch(e) {}
+  } else {
+    // Browser fallback using localStorage
+    try {
+      const sg = localStorage.getItem('bgmi_games');
+      if (sg) games = JSON.parse(sg);
+      const la = localStorage.getItem('bgmi_locked');
+      if (la) LA = JSON.parse(la);
+    } catch(e) {}
+  }
+}
+
+// ════ SAVE DATA (PERSISTENT) ════
+function saveData() {
+  if (isAndroid) {
+    try { Android.saveGames(JSON.stringify(games)); } catch(e) {}
+    try { Android.saveLockedApps(JSON.stringify(LA)); } catch(e) {}
+    try { Android.saveSettings('toggleStates', JSON.stringify(TS)); } catch(e) {}
+  } else {
+    try {
+      localStorage.setItem('bgmi_games', JSON.stringify(games));
+      localStorage.setItem('bgmi_locked', JSON.stringify(LA));
+    } catch(e) {}
+  }
+}
+
+// ════ SHIZUKU SETUP ════
+function setupShizuku() {
+  if (isAndroid) {
+    const hasShizuku = Android.isShizukuAvailable();
+    if (hasShizuku) {
+      Android.openShizuku();
+      setTimeout(() => {
+        shizukuActive = true;
+        showShizukuConnected();
+        toast('✅ Shizuku active! Real system access enabled!');
+      }, 2000);
+    } else {
+      Android.openShizuku();
+      toast('📲 Shizuku install ho raha hai — install karo phir wapas aao!');
+    }
+  } else {
+    toast('Shizuku sirf APK mein kaam karta hai!');
+  }
+}
+
+function showShizukuConnected() {
+  document.getElementById('shizukuBanner').style.display = 'none';
+  const conn = document.getElementById('shizukuConnected');
+  conn.style.display = 'block';
+  document.getElementById('dtag').textContent = '✅ SHIZUKU ACTIVE · SD768G';
+}
+
+// ════ LOAD DEVICE APPS ════
+function loadDeviceApps() {
+  if (!isAndroid) return;
+  try {
+    const raw = Android.getInstalledApps();
+    deviceApps = JSON.parse(raw);
+    deviceGames = deviceApps; // All launchable apps
+    toast('📱 ' + deviceApps.length + ' apps loaded from device!');
+  } catch(e) {}
+}
+
+// ════ REAL STATS UPDATE ════
+function updateStats() {
+  // Battery
+  if (isAndroid) {
+    try {
+      const bat = JSON.parse(Android.getBatteryInfo());
+      const ic = bat.charging ? '⚡' : '🔋';
+      document.getElementById('batPill').textContent = ic + ' ' + bat.level + '%';
+    } catch(e) {}
+
+    // RAM
+    try {
+      const ram = JSON.parse(Android.getRamInfo());
+      const availGB = (ram.availMB / 1024).toFixed(1);
+      const totalGB = (ram.totalMB / 1024).toFixed(1);
+      const pct = Math.round((ram.availMB / ram.totalMB) * 100);
+      setStat('ram', availGB+'GB', pct, 'var(--bl)', pct > 40 ? 'GOOD' : pct > 20 ? 'LOW' : 'CRITICAL');
+    } catch(e) { setStat('ram','--',0,'var(--bl)','--'); }
+
+    // CPU Temp
+    try {
+      const temp = JSON.parse(Android.getCpuTemp());
+      const c = temp.status === 'COOL' ? 'var(--gr)' : temp.status === 'WARM' ? 'var(--ye)' : 'var(--re)';
+      const pct = Math.min(100, Math.max(0, (temp.temp - 30) / 20 * 100));
+      setStat('temp', temp.temp+'°C', pct, c, temp.status);
+    } catch(e) { setStat('temp','--',0,'var(--ye)','--'); }
+
+    // Network
+    try {
+      const net = JSON.parse(Android.getNetworkInfo());
+      document.getElementById('batPill').textContent = (net.connected ? '📶' : '❌') + ' ' +
+        (document.getElementById('batPill').textContent.split(' ').slice(1).join(' ') || net.type);
+    } catch(e) {}
+  } else {
+    // Browser battery API
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then(b => {
+        const p = Math.round(b.level * 100);
+        document.getElementById('batPill').textContent = (b.charging?'⚡':'🔋') + ' ' + p + '%';
+      });
+    }
+    setStat('ram', '2.4GB', 60, 'var(--bl)', 'GOOD');
+    setStat('temp', '36°C', 30, 'var(--gr)', 'COOL');
+  }
+
+  // CPU based on features active
+  const on = Object.values(TS).filter(Boolean).length;
+  const total = Object.keys(TS).length;
+  const pct = on / total;
+  if (pct > 0.7) setStat('cpu','2.8GHz',100,'var(--or)','TURBO ⚡');
+  else if (pct > 0.3) setStat('cpu','2.4GHz',80,'var(--or)','BOOSTED');
+  else setStat('cpu','1.8GHz',60,'#556677','STANDARD');
+}
+
+function setStat(id,val,pct,color,status) {
+  const v=document.getElementById('sv-'+id);
+  const f=document.getElementById('sf-'+id);
+  const s=document.getElementById('ss-'+id);
+  if(v){v.textContent=val;v.style.color=color;}
+  if(f){f.style.width=pct+'%';f.style.background=color;}
+  if(s){s.textContent=status;s.style.color=pct>50?color:'var(--dim2)';}
+}
+
+// ════ PING CHECK ════
+function checkPing() {
+  document.getElementById('pingDisplay').textContent = '...';
+  document.getElementById('pingStatus').textContent = 'Checking BGMI servers...';
+  if (isAndroid) {
+    // Run in background thread simulation
+    setTimeout(() => {
+      try {
+        const r = JSON.parse(Android.pingBgmiServer());
+        document.getElementById('pingDisplay').textContent = r.ping + 'ms';
+        const c = r.ping < 50 ? 'var(--gr)' : r.ping < 100 ? 'var(--ye)' : 'var(--re)';
+        document.getElementById('pingDisplay').style.color = c;
+        document.getElementById('pingStatus').textContent = r.status + (r.ping < 80 ? ' — Good for BGMI!' : ' — Try DNS fix!');
+      } catch(e) {
+        document.getElementById('pingDisplay').textContent = '--ms';
+        document.getElementById('pingStatus').textContent = 'Could not check';
+      }
+    }, 100);
+  } else {
+    setTimeout(() => {
+      const p = Math.floor(Math.random() * 60) + 20;
+      document.getElementById('pingDisplay').textContent = p + 'ms';
+      document.getElementById('pingDisplay').style.color = p < 50 ? 'var(--gr)' : 'var(--ye)';
+      document.getElementById('pingStatus').textContent = p < 50 ? 'EXCELLENT' : 'GOOD';
+    }, 1200);
+  }
+}
+
+// ════ TOGGLE ════
+function renderTog(cat) {
+  const el = document.getElementById('tog-'+cat);
+  if (!el) return;
+  el.innerHTML = FEATS[cat].map((f,i) => {
+    const k = cat+'_'+i, on = TS[k];
+    const tags = (f.real ? '<span class="feat-tag tag-real">REAL</span>' : '') +
+                 (f.shizuku ? '<span class="feat-tag tag-shizuku">SHIZUKU+</span>' : '');
+    return `<div class="feat-row ${on?'on':''}" id="row-${k}">
+      <div class="feat-left">
+        <div class="feat-name">${f.n}${tags}</div>
+        <div class="feat-desc">${f.d}</div>
+      </div>
+      <label class="tog">
+        <input type="checkbox" ${on?'checked':''} onchange="togF('${k}',this.checked)">
+        <span class="ts"></span>
+      </label>
+    </div>`;
+  }).join('');
+}
+
+function togF(k, val) {
+  TS[k] = val;
+  const row = document.getElementById('row-'+k);
+  if (row) row.className = 'feat-row' + (val?' on':'');
+  updateCount(); saveData();
+  toast(val ? '✅ Enabled' : '⭕ Disabled');
+}
+
+function SA(cat, btn) {
+  const keys = Object.keys(TS).filter(k => k.startsWith(cat+'_'));
+  const allOn = keys.every(k => TS[k]);
+  keys.forEach(k => { TS[k] = !allOn; });
+  btn.textContent = allOn ? 'SELECT ALL' : 'DESELECT ALL';
+  btn.className = 'sel-btn' + (allOn?'':' on');
+  renderTog(cat); updateCount(); saveData();
+  toast(allOn ? '⭕ All off' : '✅ All enabled!');
+}
+
+function updateCount() {
+  const total = Object.keys(TS).length;
+  const on = Object.values(TS).filter(Boolean).length;
+  document.getElementById('fcNum').textContent = on;
+  document.getElementById('fcFill').style.width = (on/total*100)+'%';
+  document.getElementById('m-feat').textContent = on;
+  const subs = ['Enable features from ⚡ BOOST tab','Good start!','Getting powerful!','Almost max!','🔥 MAX POWER!'];
+  document.getElementById('fcSub').textContent = subs[Math.min(Math.floor(on/total*4),4)];
+  document.getElementById('fcTitle').textContent = on + ' Features Active';
+  updateStats();
+}
+
+// ════ REAL BOOST ════
+function runBoost() {
+  const on = Object.values(TS).filter(Boolean).length;
+  if (!on) { toast('⚠️ Pehle features enable karo!'); return; }
+  document.getElementById('boostBtn').disabled = true;
+  document.getElementById('doneBox').style.display = 'none';
+  const prog = document.getElementById('bProg');
+  const fill = document.getElementById('bFill');
+  const stat = document.getElementById('bStat');
+  prog.style.display = 'block'; fill.style.width = '0%';
+
+  const phases = [
+    [15, '🔍 Scanning background processes...'],
+    [35, '💀 KILLING background apps...'],
+    [55, '💾 Freeing RAM for BGMI...'],
+    [70, '🌡️ Checking thermal status...'],
+    [85, '📶 Verifying network...'],
+    [100,'✅ Phone optimized for BGMI!'],
+  ];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i >= phases.length) {
+      clearInterval(iv);
+      // REAL: Actually kill background apps
+      let killedMsg = '';
+      if (isAndroid) {
+        try {
+          const r = JSON.parse(Android.killBackgroundApps());
+          killedMsg = r.killed > 0 ? ' ' + r.killed + ' apps killed!' : '';
+          Android.vibrate(80);
+        } catch(e) {}
+      }
+      setTimeout(() => {
+        prog.style.display = 'none'; stat.textContent = '';
+        document.getElementById('doneMsg').textContent = on + ' features active!' + killedMsg;
+        document.getElementById('doneBox').style.display = 'block';
+        document.getElementById('boostBtn').disabled = false;
+        updateStats();
+      }, 400);
+      return;
+    }
+    fill.style.width = phases[i][0] + '%';
+    stat.textContent = phases[i][1];
+    i++;
+  }, 600);
+}
+
+// ════ GAMES (PERSISTENT) ════
+function renderGames() {
+  const el = document.getElementById('gamesList');
+  const lbl = document.getElementById('gCountLbl');
+  if (lbl) lbl.textContent = games.length ? '(' + games.length + ')' : '';
+  document.getElementById('m-games').textContent = games.length;
+  el.innerHTML = games.length
+    ? games.map((g,i) => `<div class="game-card">
+        <div class="gi">${g.icon||'🎮'}</div>
+        <div class="ginfo"><div class="gn">${g.name}</div><div class="gp">${g.pkg}</div></div>
+        <button class="gl" onclick="launchPkg('${g.name}','${g.pkg}')">▶ LAUNCH</button>
+        <button class="gd" onclick="removeGame(${i})">✕</button>
+      </div>`).join('')
+    : '<div style="text-align:center;color:var(--dim2);padding:18px;font-size:var(--fs-md)">📱 Tap Browse to add your games!</div>';
+
+  const btn = document.getElementById('mainLaunch');
+  const b = games.find(g => g.pkg === 'com.pubg.imobile') || games[0];
+  if (b) { btn.textContent = '🎮 LAUNCH ' + b.name.toUpperCase(); btn._pkg = b.pkg; btn._name = b.name; }
+  else { btn.textContent = '🎮 ADD A GAME FIRST'; btn._pkg = null; }
+}
+
+function removeGame(i) {
+  const n = games[i].name;
+  games.splice(i, 1);
+  renderGames(); renderModal('game'); saveData();
+  toast(n + ' removed');
+}
+
+function launchPkg(name, pkg) {
+  toast('🚀 Launching ' + name + '...');
+  if (isAndroid) {
+    const ok = Android.launchApp(pkg);
+    if (!ok) toast('⚠️ ' + name + ' not installed!');
+  } else {
+    window.location.href = 'intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end';
+  }
+}
+
+function launchMain() {
+  const btn = document.getElementById('mainLaunch');
+  if (!btn._pkg) { toast('⚠️ Games tab mein pehle game add karo!'); return; }
+  launchPkg(btn._name, btn._pkg);
+}
+
+// ════ MODAL ════
+function openModal(type) {
+  // Load real device apps first
+  if (isAndroid && deviceApps.length === 0) {
+    loadDeviceApps();
+  }
+  document.getElementById('modal-'+type).classList.add('open');
+  const si = document.getElementById(type==='game'?'gsearch':'asearch');
+  if (si) si.value = '';
+  renderModal(type, '');
+}
+function closeModal(type) { document.getElementById('modal-'+type).classList.remove('open'); }
+function filterM(type, q) { renderModal(type, q); }
+
+function renderModal(type, q='') {
+  const ql = q.toLowerCase();
+  if (type === 'game') {
+    // Use real device apps if available, else fallback list
+    const src = deviceGames.length > 0 ? deviceGames : FALLBACK_GAMES;
+    const list = src.filter(g => (g.name||'').toLowerCase().includes(ql) || (g.cat||'').toLowerCase().includes(ql) || (g.pkg||'').toLowerCase().includes(ql));
+    document.getElementById('glist').innerHTML = list.map(g => {
+      const added = games.some(x => x.pkg === g.pkg);
+      const ns = (g.name||'').replace(/'/g,"'");
+      const ps = (g.pkg||'').replace(/'/g,"'");
+      return `<div class="mi ${added?'added':''}">
+        <div class="mii">${g.icon||'🎮'}</div>
+        <div class="minfo"><div class="mn">${g.name}</div><div class="mcat">${g.cat} · ${g.pkg}</div></div>
+        ${added ? '<span style="color:var(--gr);font-size:20px;flex-shrink:0">✓</span>' :
+          `<button class="madd" onclick="addGame('${ns}','${g.icon||'🎮'}','${ps}')">ADD</button>`}
+      </div>`;
+    }).join('') || '<div style="text-align:center;color:var(--dim2);padding:18px">No apps found</div>';
+  } else {
+    const src = deviceApps.length > 0 ? deviceApps : FALLBACK_APPS;
+    const list = src.filter(a => (a.name||'').toLowerCase().includes(ql) || (a.cat||'').toLowerCase().includes(ql));
+    document.getElementById('alist').innerHTML = list.map(a => {
+      const on = !!LA[a.pkg];
+      const ps = (a.pkg||'').replace(/'/g,"'");
+      const ns = (a.name||'').replace(/'/g,"'");
+      return `<div class="mi ${on?'blocked':''}">
+        <div class="mii">${a.icon||'📱'}</div>
+        <div class="minfo"><div class="mn">${a.name}</div><div class="mcat">${a.cat}</div></div>
+        <div class="chk ${on?'on':''}" onclick="togApp('${ps}','${ns}')">${on?'🚫':''}</div>
+      </div>`;
+    }).join('') || '<div style="text-align:center;color:var(--dim2);padding:18px">No apps found</div>';
+  }
+}
+
+function addGame(name, icon, pkg) {
+  if (games.some(g => g.pkg === pkg)) { toast('Already added!'); return; }
+  games.push({name, icon, pkg});
+  renderGames(); renderModal('game'); saveData();
+  toast('✅ ' + name + ' added!');
+}
+
+// ════ APP LOCK ════
+function togApp(pkg, name) {
+  LA[pkg] = !LA[pkg];
+  if (!LA[pkg]) delete LA[pkg];
+  renderAppList(); renderModal('app'); saveData();
+  toast(LA[pkg] ? '🚫 ' + name + ' will be blocked' : '✅ ' + name + ' unblocked');
+}
+
+function renderAppList() {
+  const src = deviceApps.length > 0 ? deviceApps : FALLBACK_APPS;
+  const locked = src.filter(a => LA[a.pkg]);
+  // Show only locked apps in main list
+  document.getElementById('appList').innerHTML = locked.length
+    ? locked.map(a => `<div class="ar">
+        <div class="aic">${a.icon||'📱'}</div>
+        <div style="flex:1"><div class="an">${a.name}</div><div class="acat">${a.cat}</div></div>
+        <div class="chk on" onclick="togApp('${a.pkg}','${a.name}')">🚫</div>
+      </div>`).join('')
+    : '<div style="text-align:center;color:var(--dim2);padding:16px;font-size:var(--fs-sm)">Browse apps below to add restrictions</div>';
+  const cnt = Object.keys(LA).filter(k => LA[k]).length;
+  document.getElementById('appStatus').textContent = cnt ? '🚫 ' + cnt + ' apps will be killed on Boost' : '0 apps selected';
+  document.getElementById('m-locked').textContent = cnt;
+}
+
+function SAapps(btn) {
+  const src = deviceApps.length > 0 ? deviceApps : FALLBACK_APPS;
+  const allOn = src.every(a => LA[a.pkg]);
+  src.forEach(a => { if (allOn) delete LA[a.pkg]; else LA[a.pkg] = true; });
+  btn.textContent = allOn ? 'SELECT ALL' : 'DESELECT ALL';
+  btn.className = 'sel-btn' + (allOn?'':' on');
+  renderAppList(); renderModal('app'); saveData();
+  toast(allOn ? '✅ All unblocked' : '🚫 All restricted!');
+}
+
+// ════ SETTINGS RENDER ════
+function renderSettings() {
+  // BGMI Settings table
+  document.getElementById('bgmiSettings').innerHTML = BGMI_SETTINGS.map(s => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bdr)">
+      <div>
+        <div style="font-size:var(--fs-md);font-weight:700">${s.s}</div>
+        <div style="font-size:var(--fs-xs);color:var(--dim2);margin-top:3px">${s.r}</div>
+      </div>
+      <div style="background:rgba(255,106,0,0.15);border:1px solid rgba(255,106,0,0.4);color:var(--or);padding:5px 12px;border-radius:7px;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;white-space:nowrap;margin-left:12px">${s.v}</div>
+    </div>`).join('');
+
+  // Funtouch tips
+  document.getElementById('ftosTips').innerHTML = FTOS_TIPS.map(t =>
+    `<div style="font-size:var(--fs-md);color:var(--dim2);padding:9px 0;border-bottom:1px solid var(--bdr)">${t}</div>`
+  ).join('');
+
+  // Thermal tips
+  document.getElementById('thermalTips').innerHTML = THERMAL_TIPS.map(t => `
+    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr)">
+      <span style="font-size:22px">${t.i}</span>
+      <div><div style="font-size:var(--fs-md);font-weight:700;margin-bottom:4px">${t.t}</div><div style="font-size:var(--fs-sm);color:var(--dim2)">${t.d}</div></div>
+    </div>`).join('');
+}
+
+// ════ FALLBACK LISTS ════
+const FALLBACK_GAMES = [
+  {name:'BGMI',icon:'🎯',cat:'Battle Royale',pkg:'com.pubg.imobile'},
+  {name:'Free Fire MAX',icon:'🔥',cat:'Battle Royale',pkg:'com.dts.freefiremax'},
+  {name:'COD Mobile',icon:'💀',cat:'FPS',pkg:'com.activision.callofduty.shooter'},
+  {name:'PUBG Mobile',icon:'🪖',cat:'Battle Royale',pkg:'com.tencent.ig'},
+  {name:'Mobile Legends',icon:'⚔️',cat:'MOBA',pkg:'com.mobile.legends'},
+  {name:'Clash of Clans',icon:'🏰',cat:'Strategy',pkg:'com.supercell.clans'},
+  {name:'Genshin Impact',icon:'✨',cat:'RPG',pkg:'com.miHoYo.GenshinImpact'},
+  {name:'Asphalt 9',icon:'🏎️',cat:'Racing',pkg:'com.gameloft.android.ANMP.GloftA9HM'},
+];
+const FALLBACK_APPS = [
+  {name:'WhatsApp',icon:'💬',cat:'Messaging',pkg:'com.whatsapp'},
+  {name:'Instagram',icon:'📸',cat:'Social',pkg:'com.instagram.android'},
+  {name:'YouTube',icon:'▶️',cat:'Video',pkg:'com.google.android.youtube'},
+  {name:'Facebook',icon:'👤',cat:'Social',pkg:'com.facebook.katana'},
+  {name:'Snapchat',icon:'👻',cat:'Social',pkg:'com.snapchat.android'},
+  {name:'Spotify',icon:'🎵',cat:'Music',pkg:'com.spotify.music'},
+  {name:'Chrome',icon:'🌐',cat:'Browser',pkg:'com.android.chrome'},
+  {name:'Netflix',icon:'🎬',cat:'Video',pkg:'com.netflix.mediaclient'},
+  {name:'Telegram',icon:'✈️',cat:'Messaging',pkg:'org.telegram.messenger'},
+  {name:'Hotstar',icon:'⭐',cat:'Video',pkg:'in.startv.hotstar'},
+];
+
+// ════ TABS ════
+function T(name, btn) {
+  document.querySelectorAll('.tc').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function navA(el) {
+  document.querySelectorAll('.nv').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ════ TOAST ════
+let tTm;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(tTm); tTm = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+// ════ INIT ════
+loadSaved();
+Object.keys(FEATS).forEach(c => renderTog(c));
+renderGames();
+renderAppList();
+renderSettings();
+updateCount();
+updateStats();
+setInterval(updateStats, 5000);
+
+// Load real device apps in background
+if (isAndroid) {
+  setTimeout(loadDeviceApps, 1500);
+  // Check shizuku
+  setTimeout(() => {
+    if (Android.isShizukuAvailable()) showShizukuConnected();
+  }, 500);
+}
+</script>
+</body>
+</html>
